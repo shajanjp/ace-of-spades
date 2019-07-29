@@ -3,19 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <title>Ace Of Spades</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-  <script>
-    var socket = io('http://localhost:3000');
+  <div class="ui container">
+    <div id="game-container">
+      <div class="ui stackable grid">
 
-    function alertThis(data){
-      alert(data)
-    }
-    socket.on('NEW_GAME', alertThis);
+        <div class="three wide column">
+          <div class="ui fluid vertical menu">
+           <a class="teal item">
+            Players
+            <div class="ui teal left pointing label">1</div>
+          </a>
+          <div class="item">
+            <div class="menu">
+              <a class="item">192.168.1.6</a>
+              <a class="item">192.168.1.4</a>
+            </div>
+          </div>
+          <div class="item">
+            <div class="header">Settings</div>
+            <div class="menu">
+              <a class="item" id="new-game">New Game</a>
+              <a class="item">Reset</a>
+              <a class="item">Quit</a>
+            </div>
+          </div>
+        </div>  
+      </div>
 
-    socket.emit('JOIN', { username: 'shajan'} );
-  </script>
+      <div class="five wide column">
+      </div>
+
+      <div class="eight wide column">
+        <div id="cards-container"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="./assets/js/script.js"></script>
 </body>
 </html>
