@@ -15,21 +15,35 @@ function generateRandomNumber(min, max){
 }
 
 function shaffle(ordered){
-  let shuffled = [];
-  for(var i=ordered.length; i>0; i--){
-    let r =generateRandomNumber(0, i);
-    shuffled.push(ordered.splice(r, 1)[0])
+  let newSet = ordered.slice();
+  let ready = [];
+  for(var i=newSet.length; i>0; i--){
+    let r = generateRandomNumber(0, i);
+    ready.push(newSet.splice(r, 1)[0])
   }
-  return shuffled;
+  return ready;
 }
+
 let shuffled = shaffle(allCards);
 
+function reShuffleCards(client){
+  shuffled = shaffle(allCards);
+  client.emit('CARD_SHUFFLED', { cards: shuffled.slice(0,13) });
+}
+
 io.on('connection', client => {
-  console.log('connected');
+
   client.on('JOIN', data => { 
     console.log('data', data.username);
-   });
-  client.emit('NEW_GAME', shuffled.splice(0,13).join(', '))
+  });
+
+  client.on('NEW_GAME', data => {
+    console.log('request NEW_GAME');
+    reShuffleCards(client);
+  });
+  
+  client.emit('CARD_SHUFFLED', { cards: shuffled.slice(0,13) })
+
   client.on('disconnect', () => { 
     console.log('disconnected'); 
   });
