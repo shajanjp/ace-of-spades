@@ -12,6 +12,14 @@
       <div class="ui stackable grid">
 
         <div class="three wide column">
+          <div id="my-details-container">
+          </div>
+          <br>
+          <div class="ui fluid buttons">
+            <button class="ui green button" id="take-button">Take</button>
+            <button class="ui red button" id="discard-button">Discard</button>
+          </div>
+
           <div class="ui fluid vertical menu">
            <a class="teal item">
             Players
@@ -20,13 +28,11 @@
           <div class="item">
             <div class="header">Active Games</div>
             <div class="menu">
-
             </div>
           </div>
           <div class="item">
-            <div class="menu">
-              <a class="item">Player 1</a>
-              <a class="item">Player 2</a>
+            <div class="header">Users List</div>
+            <div class="menu" id="users-list">
             </div>
           </div>
           <div class="item">
@@ -42,14 +48,17 @@
 
       <div class="nine wide column">
         <h3>Table</h3>
-        <div id="table-container">
-          <div class="ui four cards"></div>
-        </div>
+          <div class="ui four cards" id="table-container"></div>
       </div>
 
       <div class="four wide column">
         <h3>My Cards</h3>
         <div id="cards-container"></div>
+        <div id="chat-container" class="ui list">
+        </div>
+        <div class="ui fluid input">
+          <input type="text" placeholder="Search..." id="input-chat">
+        </div>
       </div>
 
     </div>

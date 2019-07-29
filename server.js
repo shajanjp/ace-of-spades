@@ -1,8 +1,10 @@
-var express = require('express');
-var bodyParser = require('body-parser')
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+let express = require('express');
+let bodyParser = require('body-parser')
+let app = express();
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
+
+let users = {}
 
 app.use('/public', express.static('public'))
 
@@ -19,7 +21,7 @@ function generateRandomNumber(min, max){
 function shaffle(ordered){
   let newSet = ordered.slice();
   let ready = [];
-  for(var i=newSet.length; i>0; i--){
+  for(let i=newSet.length; i>0; i--){
     let r = generateRandomNumber(0, i);
     ready.push(newSet.splice(r, 1)[0])
   }
@@ -28,36 +30,85 @@ function shaffle(ordered){
 
 let shuffled = shaffle(allCards);
 
-function reShuffleCards(client){
+function reShuffleCards(){
   shuffled = shaffle(allCards);
-  client.emit('CARD_SHUFFLED', { cards: shuffled.slice(0,13) });
+  console.log('on reShuffleCards');
+  let shuffledSet = []
+  console.log('shuffled length', shuffled.length);
+  for(let i=0; i<shuffled.length;){
+    for(let j=0; (j<Object.keys(users).length && (i<shuffled.length)); j++){
+      if(Array.isArray(shuffledSet[j]))
+      {
+        shuffledSet[j].push(shuffled[i++])
+      }
+      else{
+        shuffledSet[j] = [shuffled[i++]]
+      }
+    }
+  }
+  console.log('shuffledSet', shuffledSet);
+  let c = 0;
+
+  Object.keys(users).forEach(user => {
+    io.to(user).emit('CARD_SHUFFLED', { cards: shuffledSet[c++] })
+  })
 }
 
-io.on('connection', client => {
 
-  client.on('JOIN', data => { 
-    console.log('data', data.username);
+io.on('connection', (client) => {
+  users[client.id] = {
+    fullname: "Player W",
+    color: "red",
+    id: client.id
+  }
+  console.log('connection: ', users);
+  client.emit('MY_DETAILS', users[client.id])
+
+  io.emit('USERS_UPDATE', { users: users })
+
+  client.on('NAME_UPDATE', data => {
+    console.log('request NAME_UPDATE');
+    users[client.id] = {
+      fullname: data.fullname,
+      color: "red",
+      id: client.id
+    }
+    client.emit('MY_DETAILS', users[client.id])
+    io.emit('USERS_UPDATE', { users: users })
+  })
+
+  client.on('JOIN', data => {
+    console.log('request JOIN');
+    io.emit('NEW_JOIN', {user: users[client.id]})
   });
-
+ 
   client.on('NEW_GAME', data => {
     console.log('request NEW_GAME');
-    reShuffleCards(client);
+    reShuffleCards();
   });
+
+  client.on('NEW_CHAT', data => {
+    console.log('request NEW_CHAT');
+    io.emit('NEW_CHAT', {fullname: users[client.id].fullname, text: data.text});
+  });  
+
+  client.on('DISCARD', data => {
+    console.log('request DISCARD');
+    io.emit('DISCARD', {});
+  });  
 
   client.on('ADD_TO_TABLE', data => {
     console.log('request ADD_TO_TABLE');
-    client.emit('TABLE_UPDATED', { cards: [{title: data.card, owner: 'Player X'}]})
+    io.emit('TABLE_UPDATED', { card: {title: data.card}, user: users[client.id]})
   })
-  
-  setTimeout(() => {
-    client.emit('TABLE_UPDATED', { cards: [{title: 'S10', owner: 'Player 1'}, {title: 'HJ', owner: 'Player 2'}, {title: 'C5', owner: 'Player 3'}] })
-  }, 5000)
 
-  client.emit('CARD_SHUFFLED', { cards: shuffled.slice(0,13) })
-
-  client.on('disconnect', () => { 
+  client.on('disconnect', () => {
+    delete users[client.id];
+    io.emit('USERS_UPDATE', { users: users })
+    console.log('updated users', users);
     console.log('disconnected'); 
   });
+
 });
 
 http.listen(3000);
