@@ -41,7 +41,16 @@ io.on('connection', client => {
     console.log('request NEW_GAME');
     reShuffleCards(client);
   });
+
+  client.on('ADD_TO_TABLE', data => {
+    console.log('request ADD_TO_TABLE');
+    client.emit('TABLE_UPDATED', { cards: [{title: data.card, owner: 'Player X'}]})
+  })
   
+  setTimeout(() => {
+    client.emit('TABLE_UPDATED', { cards: [{title: 'S10', owner: 'Player 1'}, {title: 'HJ', owner: 'Player 2'}, {title: 'C5', owner: 'Player 3'}] })
+  }, 5000)
+
   client.emit('CARD_SHUFFLED', { cards: shuffled.slice(0,13) })
 
   client.on('disconnect', () => { 
