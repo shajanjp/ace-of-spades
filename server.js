@@ -4,6 +4,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.use('/public', express.static('public'))
+
 app.get('/', (req, res) => {
   res.json({status: true})
 })
