@@ -50,7 +50,7 @@ function reShuffleCards(){
       }
     }
   }
-  console.log('shuffledSet', shuffledSet);
+
   let c = 0;
 
   Object.keys(users).forEach(user => {
@@ -58,14 +58,13 @@ function reShuffleCards(){
   })
 }
 
-
 io.on('connection', (client) => {
   users[client.id] = {
-    fullname: "Player W",
+    fullname: randomName(),
     color: "red",
     id: client.id
   }
-  console.log('connection: ', users);
+  
   client.emit('MY_DETAILS', users[client.id])
 
   io.emit('USERS_UPDATE', { users: users })
