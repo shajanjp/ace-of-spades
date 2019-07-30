@@ -75,6 +75,7 @@ function updateUsersList(data){
     usersData += `<a class="item">${data.users[user].fullname}</a>`
   })
   usersListContainer.html(usersData);
+  let usersCountContainer = $('#users-count').html(`${Object.keys(data.users).length}`);
 }
 
 function handleNewGame(data){
