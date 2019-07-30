@@ -87,12 +87,12 @@ function handleNewGame(data){
 
 function handleNewMessage(data){
   let chatContainer = $('#chat-container')
-  chatContainer.append(`<div class="comment">
+  chatContainer.prepend(`<div class="comment">
     <a class="avatar">
-      <img src="https://api.adorable.io/avatars/50/${data.fullname}.jpg">
+      <img src="https://api.adorable.io/avatars/50/${data.user.id}.jpg">
     </a>
     <div class="content">
-      <a class="author">${data.fullname}</a>
+      <a class="author">${data.user.fullname}</a>
       <div class="text">
        ${data.text}
       </div>
