@@ -141,5 +141,5 @@ $('#take-button').on('click', () => {
       </div>
       </a>`);
   })
-  socket.emit('DISCARD', {});
+  socket.emit('TAKE_ALL', {});
 })
