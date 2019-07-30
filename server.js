@@ -29,13 +29,16 @@ function shaffle(ordered){
   return ready;
 }
 
+function randomName(){
+  let randomNameIndex = generateRandomNumber(0, (NAMES_SET.length - 1));
+  return NAMES_SET[randomNameIndex]; 
+}
+
 let shuffled = shaffle(allCards);
 
 function reShuffleCards(){
   shuffled = shaffle(allCards);
-  console.log('on reShuffleCards');
   let shuffledSet = []
-  console.log('shuffled length', shuffled.length);
   for(let i=0; i<shuffled.length;){
     for(let j=0; (j<Object.keys(users).length && (i<shuffled.length)); j++){
       if(Array.isArray(shuffledSet[j]))
