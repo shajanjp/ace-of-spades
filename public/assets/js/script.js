@@ -87,9 +87,17 @@ function handleNewGame(data){
 
 function handleNewMessage(data){
   let chatContainer = $('#chat-container')
-  chatContainer.append(`<div class="item">
-    <b>${data.fullname}</b> : ${data.text} 
-    </div>`);
+  chatContainer.append(`<div class="comment">
+    <a class="avatar">
+      <img src="https://api.adorable.io/avatars/50/${data.fullname}.jpg">
+    </a>
+    <div class="content">
+      <a class="author">${data.fullname}</a>
+      <div class="text">
+       ${data.text}
+      </div>
+    </div>
+  </div>`);
 }
 
 function handleDiscard(){
