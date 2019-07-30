@@ -98,13 +98,13 @@ io.on('connection', (client) => {
   client.on('DISCARD', data => {
     console.log('request DISCARD');
     io.emit('DISCARD', {});
-    io.emit('NEW_CHAT', {fullname: users[client.id].fullname, text: `<i>discards cards</i>`});
+    io.emit('NEW_CHAT', {fullname: users[client.id].fullname, text: `<i style="color: green;">discards all cards</i>`});
   });
 
   client.on('TAKE_ALL', data => {
     console.log('request TAKE_ALL');
     io.emit('DISCARD', {});
-    io.emit('NEW_CHAT', {fullname: users[client.id].fullname, text: `<i>takes all cards</i>`});
+    io.emit('NEW_CHAT', {fullname: users[client.id].fullname, text: `<i style="color: red;">takes all cards</i>`});
   });
 
   client.on('ADD_TO_TABLE', data => {
