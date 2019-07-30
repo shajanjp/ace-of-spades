@@ -49,7 +49,7 @@ function updateMyDetails(data){
   let myDetailsContainer = $('#my-details-container');
   myDetailsContainer.html(`<div class="ui fluid card">
     <div class="image">
-    <img src="https://api.adorable.io/avatars/100/${data.id}.png">
+    <img src="https://api.adorable.io/avatars/100/${data.id}.jpg">
     </div>
     <div class="content">
     <div class="header">${data.fullname}</div>
