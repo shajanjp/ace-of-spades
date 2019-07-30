@@ -111,4 +111,6 @@ io.on('connection', (client) => {
 
 });
 
-http.listen(3000);
+http.listen(process.env.PORT, () => {
+  console.log('Server started at: ', process.env.PORT);
+});
