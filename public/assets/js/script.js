@@ -66,6 +66,7 @@ function updateMyDetails(data){
 
 function updateMyName(){
   let newName = $('#fullname').val();
+  localStorage.setItem('username', newName);
   socket.emit('NAME_UPDATE', {fullname: newName})
 }
 
@@ -73,7 +74,11 @@ function updateUsersList(data){
   let usersListContainer = $('#users-list');
   let usersData = '';
   Object.keys(data.users).forEach(user => {
-    usersData += `<a class="item">${data.users[user].fullname}</a>`
+    usersData += `
+      <a class="item">
+        <div class="ui ${data.users[user].color} empty circular label"></div>
+        ${data.users[user].fullname}
+      </a>`
   })
   usersListContainer.html(usersData);
   let usersCountContainer = $('#users-count').html(`${Object.keys(data.users).length}`);
