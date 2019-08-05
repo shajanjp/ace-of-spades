@@ -6,6 +6,7 @@ let io = require('socket.io')(http);
 
 let users = {}
 let NAMES_SET = ["Tarsha", "Rosemary", "Florene", "Chassidy", "Sherice", "Mana", "Loise", "Laine", "Oleta", "Florine", "Shyla", "Roxanna", "Bebe", "Ferne", "Brooks", "Lore", "Tonya", "Nicolas", "Esta", "Chastity", "Rosalba", "Marylin", "Cassaundra", "Dayle", "Linnie", "Trudi", "Verdell", "Rachal", "Terry", "Thomasine", "Else", "Blair", "Marlene", "Dortha", "Selma", "Misha", "Dorcas", "Magnolia", "Rosanne", "Venita", "Larisa", "Aubrey", "Al", "Ferdinand", "Margarett", "Debera", "Tamra", "Avis", "Carissa", "Steffanie"];
+let COLOR_SET = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
 
 app.use('/', express.static('public'))
 
@@ -32,6 +33,11 @@ function shaffle(ordered){
 function randomName(){
   let randomNameIndex = generateRandomNumber(0, (NAMES_SET.length - 1));
   return NAMES_SET[randomNameIndex]; 
+}
+
+function getRandomColor(){
+  let rIndex = generateRandomNumber(0, COLOR_SET.length);
+  return COLOR_SET[rIndex];
 }
 
 let shuffled = shaffle(allCards);
@@ -61,8 +67,8 @@ function reShuffleCards(){
 io.on('connection', (client) => {
   users[client.id] = {
     fullname: randomName(),
-    color: "red",
-    id: client.id
+    id: client.id,
+    color: getRandomColor(),
   }
   
   client.emit('MY_DETAILS', users[client.id])
@@ -71,11 +77,7 @@ io.on('connection', (client) => {
 
   client.on('NAME_UPDATE', data => {
     console.log('request NAME_UPDATE');
-    users[client.id] = {
-      fullname: data.fullname,
-      color: "red",
-      id: client.id
-    }
+    users[client.id]["fullname"] = data.fullname;
     client.emit('MY_DETAILS', users[client.id])
     io.emit('USERS_UPDATE', { users: users })
   })
