@@ -165,3 +165,4 @@ $('#take-button').on('click', () => {
   })
   socket.emit('TAKE_ALL', {});
 })
+
