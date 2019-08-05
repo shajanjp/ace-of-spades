@@ -35,7 +35,7 @@ function updateTable(data){
   let tableContainer = $("#table-container");
   let cardsList = '';
   console.log('data', data);
-  tableContainer.append(`<a class="grey card" data-card='${data.card.title}'>
+  tableContainer.append(`<a class="${data.user.color} card" data-card='${data.card.title}'>
     <div class="fluid image">
     <img src='./assets/img/${data.card.title}.jpg'>
     </div>
