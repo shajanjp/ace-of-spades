@@ -12,7 +12,7 @@ function newCards(data){
   data.cards.sort(cardSort).forEach((card) => {
     cardsList += ` <a class="grey card my-card" data-card='${card}'>
     <div class="fluid image">
-    <img src='https://raw.githubusercontent.com/shajanjp/ace-of-spades/master/public/assets/img/${card}.jpg'>
+    <img src='./assets/img/${card}.svg'>
     </div>
     </a>`;
   })
