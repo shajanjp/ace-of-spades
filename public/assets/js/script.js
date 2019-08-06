@@ -1,9 +1,9 @@
 var socket = io();
-let CARD_SET = ["S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK", "SA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", "HA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", "DA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", "CA"];
+let CARD_SET = ["SA","SK","SQ","SJ","S10","S9","S8","S7","S6","S5","S4","S3","S2","DA","DK","DQ","DJ","D10","D9","D8","D7","D6","D5","D4","D3","D2","CA","CK","CQ","CJ","C10","C9","C8","C7","C6","C5","C4","C3","C2","HA","HK","HQ","HJ","H10","H9","H8","H7","H6","H5","H4","H3","H2"];
 let usernameLastSet = localStorage.getItem('username')
 
 function cardSort(a, b) {
-  return (CARD_SET.indexOf(a) > CARD_SET.indexOf(b));
+  return (CARD_SET.indexOf(a) - CARD_SET.indexOf(b));
 }
 
 function newCards(data){
@@ -12,7 +12,7 @@ function newCards(data){
   data.cards.sort(cardSort).forEach((card) => {
     cardsList += ` <a class="grey card my-card" data-card='${card}'>
     <div class="fluid image">
-    <img src='./assets/img/${card}.jpg'>
+    <img src='https://raw.githubusercontent.com/shajanjp/ace-of-spades/master/public/assets/img/${card}.jpg'>
     </div>
     </a>`;
   })
