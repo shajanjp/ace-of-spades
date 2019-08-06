@@ -37,7 +37,7 @@ function updateTable(data){
   console.log('data', data);
   tableContainer.append(`<a class="${data.user.color} card" data-card='${data.card.title}'>
     <div class="fluid image">
-    <img src='./assets/img/${data.card.title}.jpg'>
+    <img src='./assets/img/${data.card.title}.svg'>
     </div>
     <div class="extra">
     ${data.user.fullname}
@@ -50,7 +50,7 @@ function updateMyDetails(data){
   let myDetailsContainer = $('#my-details-container');
   myDetailsContainer.html(`<div class="ui fluid card">
     <div class="image">
-    <img src="https://api.adorable.io/avatars/100/${data.id}.jpg">
+    <img src="https://api.adorable.io/avatars/100/${data.id}.svg">
     </div>
     <div class="content">
     <div class="header">${data.fullname}</div>
@@ -95,7 +95,7 @@ function handleNewMessage(data){
   let chatContainer = $('#chat-container')
   chatContainer.prepend(`<div class="comment">
     <a class="avatar">
-      <img src="https://api.adorable.io/avatars/50/${data.user.id}.jpg">
+      <img src="https://api.adorable.io/avatars/50/${data.user.id}.svg">
     </a>
     <div class="content">
       <a class="author">${data.user.fullname}</a>
@@ -159,7 +159,7 @@ $('#take-button').on('click', () => {
     let curCard = $(card).data('card');
     cardsContainer.append(`<a class="grey card my-card" data-card='${curCard}'>
       <div class="fluid image">
-      <img src='./assets/img/${curCard}.jpg'>
+      <img src='./assets/img/${curCard}.svg'>
       </div>
       </a>`);
   })
