@@ -20,7 +20,7 @@ function newCards(data){
 }
 
 function requestNewGame(){
-  socket.emit('NEW_GAME');
+  socket.emit('SHUFFLE_CARDS');
 }
 
 function requestJoinGame(){
@@ -118,7 +118,7 @@ function handleConnected(){
 }
 
 socket.on('CARD_SHUFFLED', newCards);
-socket.on('NEW_GAME', handleNewGame);
+socket.on('SHUFFLE_CARDS', handleNewGame);
 socket.on('TABLE_UPDATED', updateTable);
 socket.on('MY_DETAILS', updateMyDetails);
 socket.on('USERS_UPDATE', updateUsersList);

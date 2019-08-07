@@ -87,8 +87,8 @@ io.on('connection', (client) => {
     io.emit('NEW_JOIN', {user: users[client.id]})
   });
  
-  client.on('NEW_GAME', data => {
-    console.log('request NEW_GAME');
+  client.on('SHUFFLE_CARDS', data => {
+    console.log('request SHUFFLE_CARDS');
     io.emit('DISCARD', {})
     io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: green;">discards all cards</i>`});
     reShuffleCards();
