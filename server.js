@@ -5,9 +5,17 @@ let http = require('http').Server(app);
 let io = require('socket.io')(http);
 let users = {}
 
+
 let GAMES_STORE = {};
 let NAMES_SET = ["Tarsha", "Rosemary", "Florene", "Chassidy", "Sherice", "Mana", "Loise", "Laine", "Oleta", "Florine", "Shyla", "Roxanna", "Bebe", "Ferne", "Brooks", "Lore", "Tonya", "Nicolas", "Esta", "Chastity", "Rosalba", "Marylin", "Cassaundra", "Dayle", "Linnie", "Trudi", "Verdell", "Rachal", "Terry", "Thomasine", "Else", "Blair", "Marlene", "Dortha", "Selma", "Misha", "Dorcas", "Magnolia", "Rosanne", "Venita", "Larisa", "Aubrey", "Al", "Ferdinand", "Margarett", "Debera", "Tamra", "Avis", "Carissa", "Steffanie"];
 let COLOR_SET = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
+
+let botUser = {
+  fullname: 'Admin',
+  id: 'WHO_NEEDS_ID',
+  color: getRandomColor(),
+  ip: "127.0.0.1"
+};
 
 app.use('/', express.static('public'))
 
