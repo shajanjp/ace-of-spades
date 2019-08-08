@@ -139,5 +139,5 @@ io.on('connection', (client) => {
 });
 
 http.listen(process.env.PORT, () => {
-  console.log('Server started at: ', process.env.PORT);
+  console.log(`Server started at: http://localhost:${process.env.PORT}`);
 });
