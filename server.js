@@ -3,10 +3,19 @@ let bodyParser = require('body-parser')
 let app = express();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
-
 let users = {}
+
+
+let GAMES_STORE = {};
 let NAMES_SET = ["Tarsha", "Rosemary", "Florene", "Chassidy", "Sherice", "Mana", "Loise", "Laine", "Oleta", "Florine", "Shyla", "Roxanna", "Bebe", "Ferne", "Brooks", "Lore", "Tonya", "Nicolas", "Esta", "Chastity", "Rosalba", "Marylin", "Cassaundra", "Dayle", "Linnie", "Trudi", "Verdell", "Rachal", "Terry", "Thomasine", "Else", "Blair", "Marlene", "Dortha", "Selma", "Misha", "Dorcas", "Magnolia", "Rosanne", "Venita", "Larisa", "Aubrey", "Al", "Ferdinand", "Margarett", "Debera", "Tamra", "Avis", "Carissa", "Steffanie"];
 let COLOR_SET = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
+
+let botUser = {
+  fullname: 'Admin',
+  id: 'WHO_NEEDS_ID',
+  color: getRandomColor(),
+  ip: "127.0.0.1"
+};
 
 app.use('/', express.static('public'))
 
@@ -69,6 +78,8 @@ io.on('connection', (client) => {
     fullname: randomName(),
     id: client.id,
     color: getRandomColor(),
+    ip: client.request.connection.remoteAddress,
+    isNewUser: true,
   }
   
   client.emit('MY_DETAILS', users[client.id])
@@ -77,6 +88,7 @@ io.on('connection', (client) => {
 
   client.on('NAME_UPDATE', data => {
     console.log('request NAME_UPDATE');
+    io.emit('NEW_CHAT', {user: botUser, text: `<span><i>${users[client.id].fullname}</i> changed name to <i>${data.fullname}</i><span>`});
     users[client.id]["fullname"] = data.fullname;
     client.emit('MY_DETAILS', users[client.id])
     io.emit('USERS_UPDATE', { users: users })
@@ -87,8 +99,8 @@ io.on('connection', (client) => {
     io.emit('NEW_JOIN', {user: users[client.id]})
   });
  
-  client.on('NEW_GAME', data => {
-    console.log('request NEW_GAME');
+  client.on('SHUFFLE_CARDS', data => {
+    console.log('request SHUFFLE_CARDS');
     io.emit('DISCARD', {})
     io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: green;">discards all cards</i>`});
     reShuffleCards();
@@ -127,5 +139,5 @@ io.on('connection', (client) => {
 });
 
 http.listen(process.env.PORT, () => {
-  console.log('Server started at: ', process.env.PORT);
+  console.log(`Server started at: http://localhost:${process.env.PORT}`);
 });

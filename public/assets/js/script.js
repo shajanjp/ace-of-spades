@@ -20,7 +20,7 @@ function newCards(data){
 }
 
 function requestNewGame(){
-  socket.emit('NEW_GAME');
+  socket.emit('SHUFFLE_CARDS');
 }
 
 function requestJoinGame(){
@@ -35,12 +35,19 @@ function updateTable(data){
   let tableContainer = $("#table-container");
   let cardsList = '';
   console.log('data', data);
-  tableContainer.append(`<a class="${data.user.color} card" data-card='${data.card.title}'>
+  tableContainer.append(`<a class="${data.user.color} card" 
+    data-card='${data.card.title}' 
+    data-card-owner='${data.user.id}'>
     <div class="fluid image">
     <img src='./assets/img/${data.card.title}.svg'>
     </div>
     <div class="extra">
     ${data.user.fullname}
+    </div>
+    <div class="extra content">
+    <span>
+    <i class="undo icon"></i>
+    </span>
     </div>
     </a>`);
 }
@@ -48,20 +55,21 @@ function updateTable(data){
 function updateMyDetails(data){
   console.log('updateMyDetails', data);
   let myDetailsContainer = $('#my-details-container');
-  myDetailsContainer.html(`<div class="ui fluid card">
-    <div class="image">
-    <img src="https://api.adorable.io/avatars/100/${data.id}.svg">
-    </div>
+  myDetailsContainer.html(`
+    <div class="ui fluid list">
+    <div class="item">
+    <img class="ui avatar image" src="https://api.adorable.io/avatars/50/${data.fullname}.svg">
     <div class="content">
-    <div class="header">${data.fullname}</div>
+    <a class="header" contentEd>${data.fullname}</a>
+    <div class="description">${data.ip}</div>
     </div>
-    <div class="extra content">
+    </div>
+    </div>
     <div class="ui large transparent left icon input">
     <i class="edit outline icon"></i>
     <input type="text" placeholder="Update Name" value="${data.fullname}" id="fullname">
     </div>
-    </div>
-    </div>`)
+    `)
 }
 
 function updateMyName(){
@@ -95,7 +103,7 @@ function handleNewMessage(data){
   let chatContainer = $('#chat-container')
   chatContainer.prepend(`<div class="comment">
     <a class="avatar">
-      <img src="https://api.adorable.io/avatars/50/${data.user.id}.svg">
+      <img src="https://api.adorable.io/avatars/50/${data.user.fullname}.svg">
     </a>
     <div class="content">
       <a class="author">${data.user.fullname}</a>
@@ -118,7 +126,7 @@ function handleConnected(){
 }
 
 socket.on('CARD_SHUFFLED', newCards);
-socket.on('NEW_GAME', handleNewGame);
+socket.on('SHUFFLE_CARDS', handleNewGame);
 socket.on('TABLE_UPDATED', updateTable);
 socket.on('MY_DETAILS', updateMyDetails);
 socket.on('USERS_UPDATE', updateUsersList);
