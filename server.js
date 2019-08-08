@@ -78,6 +78,8 @@ io.on('connection', (client) => {
     fullname: randomName(),
     id: client.id,
     color: getRandomColor(),
+    ip: client.request.connection.remoteAddress,
+    isNewUser: true,
   }
   
   client.emit('MY_DETAILS', users[client.id])
@@ -86,6 +88,7 @@ io.on('connection', (client) => {
 
   client.on('NAME_UPDATE', data => {
     console.log('request NAME_UPDATE');
+    io.emit('NEW_CHAT', {user: botUser, text: `<span><i>${users[client.id].fullname}</i> changed name to <i>${data.fullname}</i><span>`});
     users[client.id]["fullname"] = data.fullname;
     client.emit('MY_DETAILS', users[client.id])
     io.emit('USERS_UPDATE', { users: users })
