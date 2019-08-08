@@ -103,7 +103,7 @@ function handleNewMessage(data){
   let chatContainer = $('#chat-container')
   chatContainer.prepend(`<div class="comment">
     <a class="avatar">
-      <img src="https://api.adorable.io/avatars/50/${data.user.id}.svg">
+      <img src="https://api.adorable.io/avatars/50/${data.user.fullname}.svg">
     </a>
     <div class="content">
       <a class="author">${data.user.fullname}</a>
