@@ -1,11 +1,12 @@
 {
   "name": "ace-of-spades",
   "version": "0.0.1",
-  "description": "Card game",
+  "description": "Ace of Spades - Multiplayer Card Game",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "PORT=3000 node server.js"
   },
   "repository": {
     "type": "git",
