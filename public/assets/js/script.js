@@ -28,6 +28,10 @@ function requestNewGame(){
   socket.emit('SHUFFLE_CARDS');
 }
 
+function requestNewRoom(){
+  socket.emit('NEW_ROOM', {title: 'Spaders'});
+}
+
 function requestJoinGame(){
   socket.emit('JOIN', { username: 'PlAYER1'} );
 }
