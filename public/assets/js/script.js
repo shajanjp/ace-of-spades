@@ -101,6 +101,19 @@ function updateUsersList(data){
   let usersCountContainer = $('#users-count').html(`${Object.keys(data.users).length}`);
 }
 
+function handleRoomsUpdate(data){
+  let roomsContainer = $('#active-rooms');
+  roomsContainerData = '';
+  Object.keys(data).forEach(room => {
+    roomsContainerData += `
+    <a class="item">
+    <div class="ui empty circular label" data-id="${data[room].id}"></div>
+    ${data[room].title}
+    </a>`
+  })
+  roomsContainer.html(roomsContainerData);
+}
+
 function handleNewGame(data){
   console.log('handleNewGame data', data);
   let tableContainer = $("#table-container");
