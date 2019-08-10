@@ -154,12 +154,19 @@ socket.on('MY_DETAILS', updateMyDetails);
 socket.on('USERS_UPDATE', updateUsersList);
 socket.on('NEW_CHAT', handleNewMessage);
 socket.on('DISCARD', handleDiscard);
+socket.on('ROOMS_UPDATED', handleRoomsUpdate);
 socket.on('connect', handleConnected)
 
 
 document.getElementById('new-game').onclick = () => {
   requestNewGame();
 }
+
+document.getElementById('new-room').onclick = () => {
+  requestNewRoom();
+}
+
+
 
 $('body').on('click', '.my-card', function(){
   playCard($(this).data('card'));
