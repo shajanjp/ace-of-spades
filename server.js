@@ -73,7 +73,31 @@ function reShuffleCards(){
   })
 }
 
+
+function handle_NEW_ROOM(data, client){
+  console.log('request NEW_ROOM');
+  let roomCreatedAt = Date.now();
+  let roomDetails = {
+    id: roomCreatedAt,
+    title: data.title, 
+    admin: client.id,
+    users: [client.id],
+    createdAt: roomCreatedAt
+  }
+
+  GAMES_STORE[roomCreatedAt] = roomDetails;
+  io.emit('ROOMS_UPDATED', GAMES_STORE );
+}
+
 io.on('connection', (client) => {
+
+ console.log("sessionId", client.handshake.query.sessionId);
+
+ if(client.handshake.query.sessionId == '0'){
+  let clientSessionId = Date.now();
+  client.emit('SESSION_ID', { sessionId: clientSessionId })
+}
+
   users[client.id] = {
     fullname: randomName(),
     id: client.id,
