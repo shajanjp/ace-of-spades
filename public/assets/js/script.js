@@ -43,7 +43,6 @@ function playCard(card){
 function updateTable(data){
   let tableContainer = $("#table-container");
   let cardsList = '';
-  console.log('data', data);
   tableContainer.append(`<a class="${data.user.color} card" 
     data-card='${data.card.title}' 
     data-card-owner='${data.user.id}'>
@@ -62,7 +61,6 @@ function updateTable(data){
 }
 
 function updateMyDetails(data){
-  console.log('updateMyDetails', data);
   let myDetailsContainer = $('#my-details-container');
   myDetailsContainer.html(`
     <div class="ui fluid list">
@@ -141,7 +139,6 @@ function handleDiscard(){
 }
 
 function handleConnected(){
-  console.log('connected to server');
   if(usernameLastSet && usernameLastSet !== ''){
     socket.emit('NAME_UPDATE', { fullname: usernameLastSet })
   }
