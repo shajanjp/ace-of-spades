@@ -112,8 +112,11 @@ function handleRoomsUpdate(data){
   roomsContainer.html(roomsContainerData);
 }
 
+function handleSESSION_ID(data){
+  localStorage.setItem('sessionId', data.sessionId);
+}
+
 function handleNewGame(data){
-  console.log('handleNewGame data', data);
   let tableContainer = $("#table-container");
   tableContainer.html('');
   newCards(data);
@@ -152,6 +155,7 @@ socket.on('USERS_UPDATE', updateUsersList);
 socket.on('NEW_CHAT', handleNewMessage);
 socket.on('DISCARD', handleDiscard);
 socket.on('ROOMS_UPDATED', handleRoomsUpdate);
+socket.on('SESSION_ID', handleSESSION_ID);
 socket.on('connect', handleConnected)
 
 
