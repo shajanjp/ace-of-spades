@@ -1,11 +1,12 @@
 let sessionId = localStorage.getItem('sessionId') || '0';
+let usernameLastSet = localStorage.getItem('username');
+
 let socketQuery = {
-  query: `sessionId=${sessionId}`
+  query: `sessionId=${sessionId}&username=${usernameLastSet}`
 }
 
 var socket = io.connect('', socketQuery);
 let CARD_SET = ["SA","SK","SQ","SJ","S10","S9","S8","S7","S6","S5","S4","S3","S2","DA","DK","DQ","DJ","D10","D9","D8","D7","D6","D5","D4","D3","D2","CA","CK","CQ","CJ","C10","C9","C8","C7","C6","C5","C4","C3","C2","HA","HK","HQ","HJ","H10","H9","H8","H7","H6","H5","H4","H3","H2"];
-let usernameLastSet = localStorage.getItem('username')
 
 function cardSort(a, b) {
   return (CARD_SET.indexOf(a) - CARD_SET.indexOf(b));
@@ -141,11 +142,6 @@ function handleDiscard(){
   $('#table-container').html('');
 }
 
-function handleConnected(){
-  if(usernameLastSet && usernameLastSet !== ''){
-    socket.emit('NAME_UPDATE', { fullname: usernameLastSet })
-  }
-}
 
 socket.on('CARD_SHUFFLED', newCards);
 socket.on('SHUFFLE_CARDS', handleNewGame);
@@ -156,8 +152,6 @@ socket.on('NEW_CHAT', handleNewMessage);
 socket.on('DISCARD', handleDiscard);
 socket.on('ROOMS_UPDATED', handleRoomsUpdate);
 socket.on('SESSION_ID', handleSESSION_ID);
-socket.on('connect', handleConnected)
-
 
 document.getElementById('new-game').onclick = () => {
   requestNewGame();

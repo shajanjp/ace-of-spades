@@ -103,22 +103,25 @@ function handle_NEW_ROOM(data, clientDetails){
 
 io.on('connection', (client) => {
   let clientSessionId;
+  let username;
   console.log("sessionId", client.handshake.query.sessionId);
 
   if(client.handshake.query.sessionId == '0'){
+    username = randomName();
     clientSessionId = Date.now();
     client.emit('SESSION_ID', { sessionId: clientSessionId })
   }
   else{
+    username = client.handshake.query.username;
     clientSessionId = client.handshake.query.sessionId;
   }
 
   users[clientSessionId] = {
-    fullname: randomName(),
+    fullname: username,
     id: clientSessionId,
     socketId: client.id,
     color: getRandomColor(),
-    ip: client.request.connection.remoteAddress,
+    ip: client.request.connection.remoteAddress.replace('::ffff:', ''),
     isNewUser: true,
   }
   
