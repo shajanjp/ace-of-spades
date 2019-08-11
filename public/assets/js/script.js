@@ -1,6 +1,6 @@
-let sectionId = localStorage.getItem('sectionId') || '0';
+let sessionId = localStorage.getItem('sessionId') || '0';
 let socketQuery = {
-  query: `sessionId=${sectionId}`
+  query: `sessionId=${sessionId}`
 }
 
 var socket = io.connect('', socketQuery);
