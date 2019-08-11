@@ -67,98 +67,115 @@ function reShuffleCards(){
 
   let c = 0;
 
-  Object.keys(users).forEach(user => {
-    io.to(user).emit('CARD_SHUFFLED', { cards: shuffledSet[c++] })
+  Object.values(users).forEach(user => {
+    io.to(user.socketId).emit('CARD_SHUFFLED', { cards: shuffledSet[c++] })
   })
 }
 
+function getRoom(clientSessionId){
+  let userRoomFound = false;
+  Object.values(GAMES_STORE).forEach(room => {
+    if(room.users.indexOf(clientSessionId) !== -1 ){
+      userRoomFound = room;
+    }
+  })
+  return userRoomFound;
+}
 
-function handle_NEW_ROOM(data, client){
+
+function handle_NEW_ROOM(data, clientDetails){
   console.log('request NEW_ROOM');
-  let roomCreatedAt = Date.now();
-  let roomDetails = {
-    id: roomCreatedAt,
-    title: data.title, 
-    admin: client.id,
-    users: [client.id],
-    createdAt: roomCreatedAt
-  }
+  if(!getRoom(clientDetails.id)){
+    let roomCreatedAt = Date.now();
+    let roomDetails = {
+      id: roomCreatedAt,
+      title: data.title, 
+      admin: clientDetails.id,
+      users: [clientDetails.id],
+      createdAt: roomCreatedAt
+    }
 
-  GAMES_STORE[roomCreatedAt] = roomDetails;
-  io.emit('ROOMS_UPDATED', GAMES_STORE );
+    GAMES_STORE[roomCreatedAt] = roomDetails;
+    console.log('ROOM STORE', GAMES_STORE)
+    io.emit('ROOMS_UPDATED', GAMES_STORE );
+  }
 }
 
 io.on('connection', (client) => {
+  let clientSessionId;
+  console.log("sessionId", client.handshake.query.sessionId);
 
- console.log("sessionId", client.handshake.query.sessionId);
+  if(client.handshake.query.sessionId == '0'){
+    clientSessionId = Date.now();
+    client.emit('SESSION_ID', { sessionId: clientSessionId })
+  }
+  else{
+    clientSessionId = client.handshake.query.sessionId;
+  }
 
- if(client.handshake.query.sessionId == '0'){
-  let clientSessionId = Date.now();
-  client.emit('SESSION_ID', { sessionId: clientSessionId })
-}
-
-  users[client.id] = {
+  users[clientSessionId] = {
     fullname: randomName(),
-    id: client.id,
+    id: clientSessionId,
+    socketId: client.id,
     color: getRandomColor(),
     ip: client.request.connection.remoteAddress,
     isNewUser: true,
   }
   
-  client.emit('MY_DETAILS', users[client.id])
+  client.emit('MY_DETAILS', users[clientSessionId])
 
   io.emit('USERS_UPDATE', { users: users })
 
   client.on('NAME_UPDATE', data => {
     console.log('request NAME_UPDATE');
-    io.emit('NEW_CHAT', {user: botUser, text: `<span><i>${users[client.id].fullname}</i> changed name to <i>${data.fullname}</i><span>`});
-    users[client.id]["fullname"] = data.fullname;
-    client.emit('MY_DETAILS', users[client.id])
+    io.emit('NEW_CHAT', {user: botUser, text: `<span><i>${users[clientSessionId].fullname}</i> changed name to <i>${data.fullname}</i><span>`});
+    users[clientSessionId]["fullname"] = data.fullname;
+    client.emit('MY_DETAILS', users[clientSessionId])
     io.emit('USERS_UPDATE', { users: users })
   })
 
   client.on('JOIN', data => {
     console.log('request JOIN');
-    io.emit('NEW_JOIN', {user: users[client.id]})
+    io.emit('NEW_JOIN', {user: users[clientSessionId]})
   });
  
   client.on('SHUFFLE_CARDS', data => {
     console.log('request SHUFFLE_CARDS');
     io.emit('DISCARD', {})
-    io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: green;">discards all cards</i>`});
+    io.emit('NEW_CHAT', {user: users[clientSessionId], text: `<i style="color: green;">discards all cards</i>`});
     reShuffleCards();
-    io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: blue;">starts a new game</i>`});
+    io.emit('NEW_CHAT', {user: users[clientSessionId], text: `<i style="color: blue;">starts a new game</i>`});
   });
 
   client.on('NEW_CHAT', data => {
     console.log('request NEW_CHAT');
-    io.emit('NEW_CHAT', {user: users[client.id], text: data.text});
+    io.emit('NEW_CHAT', {user: users[clientSessionId], text: data.text});
   });  
 
   client.on('DISCARD', data => {
     console.log('request DISCARD');
     io.emit('DISCARD', {});
-    io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: green;">discards all cards</i>`});
+    io.emit('NEW_CHAT', {user: users[clientSessionId], text: `<i style="color: green;">discards all cards</i>`});
   });
 
   client.on('TAKE_ALL', data => {
     console.log('request TAKE_ALL');
     io.emit('DISCARD', {});
-    io.emit('NEW_CHAT', {user: users[client.id], text: `<i style="color: red;">takes all cards</i>`});
+    io.emit('NEW_CHAT', {user: users[clientSessionId], text: `<i style="color: red;">takes all cards</i>`});
   });
 
   client.on('ADD_TO_TABLE', data => {
     console.log('request ADD_TO_TABLE');
-    io.emit('TABLE_UPDATED', { card: {title: data.card}, user: users[client.id]})
+    io.emit('TABLE_UPDATED', { card: {title: data.card}, user: users[clientSessionId]})
   })
 
   client.on('NEW_ROOM', data => {
-    handle_NEW_ROOM(data, client);
+    handle_NEW_ROOM(data, users[clientSessionId]);
   })
 
 
   client.on('disconnect', () => {
-    delete users[client.id];
+    delete users[clientSessionId];
     io.emit('USERS_UPDATE', { users: users })
     console.log('updated users', users);
     console.log('disconnected'); 
