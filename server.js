@@ -136,6 +136,8 @@ io.on('connection', (client) => {
   
   client.emit('MY_DETAILS', users[clientSessionId])
 
+  io.emit('ROOMS_UPDATED', GAMES_STORE);
+  
   io.emit('USERS_UPDATE', { users: users })
 
   client.on('NAME_UPDATE', data => {
@@ -183,6 +185,10 @@ io.on('connection', (client) => {
 
   client.on('NEW_ROOM', data => {
     handle_NEW_ROOM(data, users[clientSessionId]);
+  })
+
+  client.on('JOIN_ROOM', data => {
+    handle_JOIN_ROOM(data, users[clientSessionId]);
   })
 
 
