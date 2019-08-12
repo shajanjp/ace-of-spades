@@ -101,6 +101,15 @@ function handle_NEW_ROOM(data, clientDetails){
   }
 }
 
+function handle_JOIN_ROOM(data, clientDetails){
+  console.log('request JOIN_ROOM');
+  if(!getRoom(clientDetails.id)){
+    GAMES_STORE[data.roomId].users.push(clientDetails.id);
+    console.log('ROOM STORE', GAMES_STORE)
+    io.emit('USER_JOIN_ROOM', GAMES_STORE);
+  }
+}
+
 io.on('connection', (client) => {
   let clientSessionId;
   let username;
