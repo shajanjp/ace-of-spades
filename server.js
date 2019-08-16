@@ -101,6 +101,15 @@ function handle_NEW_ROOM(data, clientDetails){
   }
 }
 
+function removeDependentRooms(userId){
+  Object.values(GAMES_STORE).forEach(game => {
+    let userIndex = game.users.indexOf(userId);
+    if(userIndex > -1){
+      GAMES_STORE[game.id].users.splice(userIndex, 1);
+    }
+  })
+}
+
 function handle_JOIN_ROOM(data, clientDetails){
   console.log('request JOIN_ROOM');
   if(!getRoom(clientDetails.id)){
