@@ -202,6 +202,7 @@ io.on('connection', (client) => {
 
 
   client.on('disconnect', () => {
+    removeDependentRooms(clientSessionId)
     delete users[clientSessionId];
     io.emit('USERS_UPDATE', { users: users })
     console.log('updated users', users);
