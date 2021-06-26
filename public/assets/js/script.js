@@ -67,7 +67,7 @@ function updateMyDetails(data) {
   myDetailsContainer.html(`
     <div class="ui fluid list">
     <div class="item">
-    <img class="ui avatar image" src="https://api.adorable.io/avatars/50/${data.fullname}.svg">
+    <img class="ui avatar image" src="/api/avatar?name=${data.fullname}">
     <div class="content">
     <a class="header" contentEd>${data.fullname}</a>
     <div class="description">${data.ip}</div>
@@ -136,7 +136,7 @@ function handleNewMessage(data) {
 
   chatContainer.prepend(`<div class="comment">
     <a class="avatar">
-      <img src="https://api.adorable.io/avatars/50/${data.user.fullname}.svg">
+      <img src="/api/avatar?name=${data.user.fullname}">
     </a>
     <div class="content">
       <a class="author">${data.user.fullname}</a>
