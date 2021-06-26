@@ -28,8 +28,9 @@ function generateRandomNumber(min, max) {
 }
 
 function shaffle(ordered) {
-  let newSet = ordered.slice();
-  let ready = [];
+  const newSet = ordered.slice();
+  const ready = [];
+
   for (let i = newSet.length; i > 0; i--) {
     let r = generateRandomNumber(0, i);
     ready.push(newSet.splice(r, 1)[0]);
@@ -38,7 +39,8 @@ function shaffle(ordered) {
 }
 
 function randomName() {
-  let randomNameIndex = generateRandomNumber(0, NAMES_SET.length - 1);
+  const randomNameIndex = generateRandomNumber(0, NAMES_SET.length - 1);
+
   return NAMES_SET[randomNameIndex];
 }
 
@@ -71,6 +73,7 @@ function reShuffleCards() {
 
 function getRoom(clientSessionId) {
   let userRoomFound = false;
+
   Object.values(GAMES_STORE).forEach((room) => {
     if (room.users.indexOf(clientSessionId) !== -1) {
       userRoomFound = room;
