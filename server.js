@@ -21,6 +21,19 @@ app.get("/api", (req, res) => {
   res.json({ status: true });
 });
 
+app.get("/api/avatar", (req, res) => {
+  const text = (req.query.name || 'Guest').toUpperCase().split(' ').slice(0,2).map(n => n[0]).join('');
+  const imageData = `<svg width="120" height="120" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect x="0" y="0" width="120" height="120" fill="#555"/>
+      <text x="50%" y="50%" alignment-baseline="central" dominant-baseline="central" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="54">${text}</text>
+    </g>
+  </svg>`;
+
+  res.set('Content-Type', 'image/svg+xml');
+  res.send(imageData);
+});
+
 let allCards = ["S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK", "SA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", "HA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", "DA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", "CA" ];
 
 function generateRandomNumber(min, max) {
