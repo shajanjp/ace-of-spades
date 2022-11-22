@@ -20,6 +20,6 @@
   "homepage": "https://github.com/shajanjp/ace-of-spades#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.5.3"
   }
 }
